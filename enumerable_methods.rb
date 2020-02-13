@@ -38,4 +38,16 @@ module Enumerable
     end
     return true
    end
+   def my_any?
+    unless block_given?
+        self.my_each do |x|
+            return true if x
+        end
+        return false
+    end
+    self.my_each do |x|
+        return true if yield(x)
+    end
+    return false
+   end
 end
