@@ -7,7 +7,7 @@ module Enumerable
     for x in self
         yield(x)
     end
-    return self
+    self
    end
    def my_each_with_index
     return self.to_enum unless block_given?
@@ -16,7 +16,7 @@ module Enumerable
         yield(x, i)
         i += 1
     end
-    return self
+    self
    end
    def my_select
     return self.to_enum unless block_given?
@@ -24,7 +24,7 @@ module Enumerable
     self.my_each do |x|
         new_array.push(x) if yield(x)
     end
-    return new_array
+    new_array
    end
    def my_all?
     unless block_given?
@@ -36,7 +36,7 @@ module Enumerable
     self.my_each do |x|
         return false unless yield(x)
     end
-    return true
+    true
    end
    def my_any?
     unless block_given?
@@ -48,6 +48,18 @@ module Enumerable
     self.my_each do |x|
         return true if yield(x)
     end
-    return false
+    false
+   end
+   def my_none?
+    unless block_given?
+        self.my_each do |x|
+            return false if x
+        end
+        return true
+    end
+    self.my_each do |x|
+        return false if yield(x)
+    end
+    true
    end
 end
