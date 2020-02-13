@@ -76,7 +76,7 @@ module Enumerable
     end
     count
    end
-   def my_map(&proc)
+   def my_map(proc)
     # return self.to_enum unless block_given?
     new_array = []
     self.my_each do |x|
@@ -99,5 +99,3 @@ def multiply_els(arr)
         memo *= x
     end
 end
-
-new_proc = Proc.new { |x| x * 2}
