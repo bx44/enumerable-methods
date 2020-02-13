@@ -18,6 +18,12 @@ module Enumerable
     end
     return self
    end
+   def my_select
+    return self.to_enum unless block_given?
+    new_array = []
+    self.my_each do |x|
+        new_array.push(x) if yield(x)
+    end
+    return new_array
+   end
 end
-
-[1, 3, 6, 8, 2, 4].my_each_with_index
