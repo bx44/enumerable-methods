@@ -76,4 +76,12 @@ module Enumerable
     end
     count
    end
+   def my_map
+    return self.to_enum unless block_given?
+    new_array = []
+    self.my_each do |x|
+        new_array.push yield(x)
+    end
+    new_array
+   end
 end
