@@ -92,3 +92,9 @@ module Enumerable
     initial
    end
 end
+
+def multiply_els(arr)
+    arr.my_inject do |memo, x|
+        memo *= x
+    end
+end
