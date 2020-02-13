@@ -26,4 +26,11 @@ module Enumerable
     end
     return new_array
    end
+   def my_all?
+    return true unless block_given?
+    self.my_each do |x|
+        return false unless yield(x)
+    end
+    return true
+    end
 end
