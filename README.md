@@ -17,7 +17,7 @@ To use this script it has to be imported into another one or be loaded in the sh
 - Linkedin: [Barak Ben-Hamu](https://www.linkedin.com/in/barak-ben-hamu-44aa89196/)
 
 
-## 🤝 Contributing
+## Contributing 🤝
 
 Contributions, issues and feature requests are welcome!
 
