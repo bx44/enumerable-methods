@@ -84,4 +84,11 @@ module Enumerable
     end
     new_array
    end
+   def my_inject(initial=nil)
+    initial ||= self[0]
+    self.my_each do |x|
+        initial = yield(initial, x)
+    end
+    initial
+   end
 end
