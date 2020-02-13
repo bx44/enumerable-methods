@@ -9,6 +9,7 @@ module Enumerable
     end
     self
    end
+   
    def my_each_with_index
     return self.to_enum unless block_given?
     i = 0
@@ -18,6 +19,7 @@ module Enumerable
     end
     self
    end
+
    def my_select
     return self.to_enum unless block_given?
     new_array = []
@@ -26,6 +28,7 @@ module Enumerable
     end
     new_array
    end
+
    def my_all?
     unless block_given?
         self.my_each do |x|
@@ -38,6 +41,7 @@ module Enumerable
     end
     true
    end
+
    def my_any?
     unless block_given?
         self.my_each do |x|
@@ -50,6 +54,7 @@ module Enumerable
     end
     false
    end
+
    def my_none?
     unless block_given?
         self.my_each do |x|
@@ -62,6 +67,7 @@ module Enumerable
     end
     true
    end
+
    def my_count(item=nil)
     count = 0
     if !block_given? || item != nil
@@ -76,15 +82,20 @@ module Enumerable
     end
     count
    end
-   def my_map(proc)
-    # return self.to_enum unless block_given?
+
+   def my_map(proc=nil)
+    return self.to_enum if !block_given? && !proc
     new_array = []
     self.my_each do |x|
-        new_array.push proc.call(x)
-        # new_array.push yield(x)
+        if proc
+            new_array.push proc.call(x)
+        else
+            new_array.push yield(x)
+        end
     end
     new_array
    end
+
    def my_inject(initial=nil)
     initial ||= self[0]
     self.my_each do |x|
@@ -92,6 +103,7 @@ module Enumerable
     end
     initial
    end
+
 end
 
 def multiply_els(arr)
