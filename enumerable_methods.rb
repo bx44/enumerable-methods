@@ -62,4 +62,18 @@ module Enumerable
     end
     true
    end
+   def my_count(item=nil)
+    count = 0
+    if !block_given? || item != nil
+        return self.length unless item
+        self.my_each do |x|
+            count += 1 if x == item
+        end
+        return count
+    end
+    self.my_each do |x|
+        count += 1 if yield(x)
+    end
+    count
+   end
 end
