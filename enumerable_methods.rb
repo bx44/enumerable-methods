@@ -77,8 +77,18 @@ module Enumerable
     false
   end
 
-  def my_none?
+  def my_none?(pat = nil)
     unless block_given?
+      if !pat.nil?
+        if pat.is_a?(Class)
+          my_each { |x| return false if x.is_a?(pat)}
+        elsif pat.class == Regexp
+          my_each { |x| return false if pat === x}
+        else
+          my_each { |x| return false if x == pat}
+        end
+        return true
+      end
       my_each do |x|
         return false if x
       end
