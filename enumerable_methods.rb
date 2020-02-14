@@ -31,8 +31,18 @@ module Enumerable
     new_array
   end
 
-  def my_all?
+  def my_all?(pat = nil)
     unless block_given?
+      if !pat.nil?
+        if pat.is_a?(Class)
+          my_each { |x| return false unless x.is_a?(pat)}
+        elsif pat.class == Regexp
+          my_each { |x| return false unless pat === x}
+        else
+          my_each { |x| return false unless x == pat}
+        end
+        return true
+      end
       my_each do |x|
         return false unless x
       end
