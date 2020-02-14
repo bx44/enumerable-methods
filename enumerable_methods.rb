@@ -130,8 +130,23 @@ module Enumerable
     new_array
   end
 
-  def my_inject(initial = nil)
+  def my_inject(*args)
+    sym, initial = nil
+    args.each do |x|
+      if x.is_a?(Symbol)
+        sym = x
+        initial ||= 0
+      else
+        initial = x
+      end
+    end
     initial ||= self[0]
+    if !block_given? && !sym.nil?
+      my_each do |x|
+        initial = x.send(sym, initial)
+      end
+      return initial
+    end
     my_each do |x|
       initial = yield(initial, x)
     end
