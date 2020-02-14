@@ -54,8 +54,18 @@ module Enumerable
     true
   end
 
-  def my_any?
+  def my_any?(pat = nil)
     unless block_given?
+      if !pat.nil?
+        if pat.is_a?(Class)
+          my_each { |x| return true if x.is_a?(pat)}
+        elsif pat.class == Regexp
+          my_each { |x| return true if pat === x}
+        else
+          my_each { |x| return true if x == pat}
+        end
+        return false
+      end
       my_each do |x|
         return true if x
       end
