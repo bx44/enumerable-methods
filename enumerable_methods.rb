@@ -78,17 +78,21 @@ module Enumerable
   end
 
   def my_none?(pat = nil)
-    condition = my_none_condition(pat, block_given?)
-    my_each do |x|
-      return false if condition.call(x)
+    if block_given?
+      my_each do |x|
+        return false if yield(x)
+      end
+    else
+      condition = my_none_condition(pat)
+      my_each do |x|
+        return false if condition.call(x)
+      end
     end
     true
   end
 
-  def my_none_condition(pat, block)
-    if block
-      condition = proc { |x| yield(x) }
-    elsif pat.is_a?(Class)
+  def my_none_condition(pat)
+    if pat.is_a?(Class)
       condition = proc { |x| x.is_a?(pat) }
     elsif pat.class == Regexp
       condition = proc { |x| pat === x } # rubocop:disable Style/CaseEquality
