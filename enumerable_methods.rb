@@ -121,19 +121,23 @@ module Enumerable # rubocop:disable Metrics/ModuleLength
     args.each do |x|
       if x.is_a?(Symbol)
         sym = x
-        initial ||= 0
       else
         initial = x
       end
     end
-    initial ||= self[0]
+    if initial.nil?
+      default_intial = true
+      initial ||= self[0]
+    end
     if !block_given? && !sym.nil?
-      my_each do |x|
+      my_each_with_index do |x, id|
+        next if id == 0 && default_intial
         initial = x.send(sym, initial)
       end
       return initial
     end
-    my_each do |x|
+    my_each_with_index do |x, id|
+      next if id == 0 && default_intial
       initial = yield(initial, x)
     end
     initial
