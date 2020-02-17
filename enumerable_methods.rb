@@ -1,6 +1,6 @@
 #!/usr/bin/ruby
 
-module Enumerable
+module Enumerable # rubocop:disable Metrics/ModuleLength
   def my_each
     return to_enum unless block_given?
 
@@ -37,7 +37,7 @@ module Enumerable
         return false unless yield(x)
       end
     else
-      condition = my_none_condition(pat)
+      condition = condition_picker(pat)
       my_each do |x|
         return false unless condition.call(x)
       end
@@ -51,7 +51,7 @@ module Enumerable
         return true if yield(x)
       end
     else
-      condition = my_none_condition(pat)
+      condition = condition_picker(pat)
       my_each do |x|
         return true if condition.call(x)
       end
@@ -65,7 +65,7 @@ module Enumerable
         return false if yield(x)
       end
     else
-      condition = my_none_condition(pat)
+      condition = condition_picker(pat)
       my_each do |x|
         return false if condition.call(x)
       end
@@ -73,7 +73,7 @@ module Enumerable
     true
   end
 
-  def my_none_condition(pat)
+  def condition_picker(pat)
     if pat.is_a?(Class)
       condition = proc { |x| x.is_a?(pat) }
     elsif pat.class == Regexp
