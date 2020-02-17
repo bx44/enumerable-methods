@@ -55,24 +55,15 @@ module Enumerable
   end
 
   def my_any?(pat = nil)
-    unless block_given?
-      unless pat.nil?
-        if pat.is_a?(Class)
-          my_each { |x| return true if x.is_a?(pat) }
-        elsif pat.class == Regexp
-          my_each { |x| return true if pat === x } # rubocop:disable Style/CaseEquality
-        else
-          my_each { |x| return true if x == pat }
-        end
-        return false
-      end
+    if block_given?
       my_each do |x|
-        return true if x
+        return true if yield(x)
       end
-      return false
-    end
-    my_each do |x|
-      return true if yield(x)
+    else
+      condition = my_none_condition(pat)
+      my_each do |x|
+        return true if condition.call(x)
+      end
     end
     false
   end
