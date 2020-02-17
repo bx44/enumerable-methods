@@ -33,13 +33,13 @@ module Enumerable
 
   def my_all?(pat = nil)
     unless block_given?
-      if !pat.nil?
+      unless pat.nil?
         if pat.is_a?(Class)
-          my_each { |x| return false unless x.is_a?(pat)}
+          my_each { |x| return false unless x.is_a?(pat) }
         elsif pat.class == Regexp
-          my_each { |x| return false unless pat === x}
+          my_each { |x| return false unless pat === x } # rubocop:disable Style/CaseEquality
         else
-          my_each { |x| return false unless x == pat}
+          my_each { |x| return false unless x == pat }
         end
         return true
       end
@@ -56,13 +56,13 @@ module Enumerable
 
   def my_any?(pat = nil)
     unless block_given?
-      if !pat.nil?
+      unless pat.nil?
         if pat.is_a?(Class)
-          my_each { |x| return true if x.is_a?(pat)}
+          my_each { |x| return true if x.is_a?(pat) }
         elsif pat.class == Regexp
-          my_each { |x| return true if pat === x}
+          my_each { |x| return true if pat === x } # rubocop:disable Style/CaseEquality
         else
-          my_each { |x| return true if x == pat}
+          my_each { |x| return true if x == pat }
         end
         return false
       end
@@ -78,26 +78,26 @@ module Enumerable
   end
 
   def my_none?(pat = nil)
-    unless block_given?
-      if !pat.nil?
-        if pat.is_a?(Class)
-          my_each { |x| return false if x.is_a?(pat)}
-        elsif pat.class == Regexp
-          my_each { |x| return false if pat === x}
-        else
-          my_each { |x| return false if x == pat}
-        end
-        return true
-      end
-      my_each do |x|
-        return false if x
-      end
-      return true
-    end
+    condition = my_none_condition(pat, block_given?)
     my_each do |x|
-      return false if yield(x)
+      return false if condition.call(x)
     end
     true
+  end
+
+  def my_none_condition(pat, block)
+    if block
+      condition = proc { |x| yield(x) }
+    elsif pat.is_a?(Class)
+      condition = proc { |x| x.is_a?(pat) }
+    elsif pat.class == Regexp
+      condition = proc { |x| pat === x } # rubocop:disable Style/CaseEquality
+    elsif !pat.nil?
+      condition = proc { |x| x == pat }
+    elsif pat.nil?
+      condition = proc { |x| x }
+    end
+    condition
   end
 
   def my_count(item = nil)
