@@ -116,7 +116,7 @@ module Enumerable # rubocop:disable Metrics/ModuleLength
     new_array
   end
 
-  def my_inject(*args)
+  def my_inject(*args) # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     sym, initial = nil
     args.each do |x|
       if x.is_a?(Symbol)
@@ -127,18 +127,16 @@ module Enumerable # rubocop:disable Metrics/ModuleLength
     end
     if initial.nil?
       default_intial = true
-      initial ||= self[0]
-    end
-    if !block_given? && !sym.nil?
-      my_each_with_index do |x, id|
-        next if id == 0 && default_intial
-        initial = x.send(sym, initial)
-      end
-      return initial
+      initial = self[0]
     end
     my_each_with_index do |x, id|
-      next if id == 0 && default_intial
-      initial = yield(initial, x)
+      next if id.zero? && default_intial
+
+      initial = if !block_given? && !sym.nil?
+                  x.send(sym, initial)
+                else
+                  yield(initial, x)
+                end
     end
     initial
   end
